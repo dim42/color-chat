@@ -1,0 +1,18 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<form method="post" action="add-user">
+    <!--/*@thymesVar id="message" type="java.lang.String"*/-->
+    <span th:text="${message}"/><br/>
+    Enter name:
+    <input name="name"> <br/>
+    Choose color:
+    <!--<select name="color" th:each="color : ${colors}">-->
+    <select name="color">
+        <!--/*@thymesVar id="color" type="com.pack.colorchat.Color"*/-->
+        <option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.text}"></option>
+    </select><br><br>
+    <input type="submit" name="okbutton" value="Ok">
+</form>
+</body>
+</html>
