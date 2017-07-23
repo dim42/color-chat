@@ -13,6 +13,9 @@ buildscript {
     }
 }
 
+plugins {
+    id 'groovy'
+}
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'org.springframework.boot'
@@ -29,13 +32,19 @@ repositories {
 
 
 dependencies {
-    compile('org.springframework.boot:spring-boot-starter')
-    compile('org.springframework.boot:spring-boot-starter-web')
-    compile('org.springframework.boot:spring-boot-starter-thymeleaf')
+    compile(
+            'org.springframework.boot:spring-boot-starter',
+            'org.springframework.boot:spring-boot-starter-web',
+            'org.springframework.boot:spring-boot-starter-thymeleaf',
 
-    compile('org.springframework.boot:spring-boot-devtools')
-    compile "org.springframework:springloaded:${springLoadedVersion}"
-    compile('org.springframework.boot:spring-boot-starter-actuator')
+            'org.springframework.boot:spring-boot-devtools',
+            "org.springframework:springloaded:${springLoadedVersion}",
+            'org.springframework.boot:spring-boot-starter-actuator',
+            'org.codehaus.groovy:groovy-all:2.4.1'
+    )
 
-    testCompile('org.springframework.boot:spring-boot-starter-test')
+    testCompile(
+            'org.springframework.boot:spring-boot-starter-test',
+            'org.spockframework:spock-core:1.0-groovy-2.4'
+    )
 }
