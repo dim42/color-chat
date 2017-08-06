@@ -13,8 +13,8 @@ Users:<br/>
 
 Conversation:<br/>
 <!--/*@thymesVar id="messages" type="java.util.List"*/-->
+<!--/*@thymesVar id="message" type="com.pack.colorchat.model.Message"*/-->
 <span th:each="message : ${messages}">
-    <!--/*@thymesVar id="message" type="com.pack.colorchat.model.Message"*/-->
     <span th:text="${message.user.name}" th:attrappend="style=${'color: ' + message.user.color}"></span><span> wrote:</span><br/>
     <span th:text="${message.text}" th:attrappend="style=${'color: ' + message.user.color}"></span><br/><br/>
 </span> <br/>

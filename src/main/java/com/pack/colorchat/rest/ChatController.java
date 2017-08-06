@@ -60,7 +60,7 @@ public class ChatController {
     @RequestMapping("/add-user")
     public String addUser(@RequestParam("name") String name, @RequestParam("color") String color, HttpSession httpSession) {
         checkUser(name);
-        String id = userService.addUser(name, of(color));
+        String id = userService.addUser(name, Companion.of(color));
         httpSession.setAttribute("user_id", id);
         return "redirect:" + CHAT;
     }
