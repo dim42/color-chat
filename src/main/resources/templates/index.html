@@ -3,13 +3,14 @@
 <body>
 <form method="post" action="add-user">
     <!--/*@thymesVar id="message" type="java.lang.String"*/-->
-    <span th:text="${message}"/><br/>
-    Enter name:
-    <input name="name"> <br/>
-    Choose color:
-    <!--<select name="color" th:each="color : ${colors}">-->
-    <select name="color">
-        <!--/*@thymesVar id="color" type="com.pack.colorchat.Color"*/-->
+    <span th:text="${message}"></span><br/>
+    <label for="name">Enter name:</label>
+    <input id="name" name="name">
+    <br/>
+    <label for="color">Choose color:</label>
+    <!--/*@thymesVar id="colors" type="java.util.List"*/-->
+    <!--/*@thymesVar id="color" type="com.pack.colorchat.model.Color"*/-->
+    <select id="color" name="color">
         <option th:each="color : ${colors}" th:value="${color.id}" th:text="${color.text}"></option>
     </select><br><br>
     <input type="submit" name="okbutton" value="Ok">

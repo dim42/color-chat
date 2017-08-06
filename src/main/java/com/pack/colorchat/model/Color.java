@@ -1,4 +1,4 @@
-package com.pack.colorchat;
+package com.pack.colorchat.model;
 
 import java.util.Arrays;
 import java.util.Collections;

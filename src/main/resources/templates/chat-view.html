@@ -1,29 +1,31 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<!--/*@thymesVar id="user" type="com.pack.colorchat.User"*/-->
-<p th:text="'Hello, ' + ${user.name} + '!'"/><br/>
+<!--/*@thymesVar id="user" type="com.pack.colorchat.model.User"*/-->
+<p th:text="'Hello, ' + ${user.name} + '!'"></p><br/>
 
 Users:<br/>
 <!--/*@thymesVar id="users" type="java.util.List"*/-->
 <span th:each="user : ${users}">
-    <!--/*@thymesVar id="user" type="com.pack.colorchat.User"*/-->
+    <!--/*@thymesVar id="user" type="com.pack.colorchat.model.User"*/-->
     <span th:text="${user.name}" th:attrappend="style=${'color: ' + user.color}"></span><br/>
 </span> <br/> <br/>
 
 Conversation:<br/>
 <!--/*@thymesVar id="messages" type="java.util.List"*/-->
 <span th:each="message : ${messages}">
-    <!--/*@thymesVar id="message" type="com.pack.colorchat.Message"*/-->
+    <!--/*@thymesVar id="message" type="com.pack.colorchat.model.Message"*/-->
     <span th:text="${message.user.name}" th:attrappend="style=${'color: ' + message.user.color}"></span><span> wrote:</span><br/>
     <span th:text="${message.text}" th:attrappend="style=${'color: ' + message.user.color}"></span><br/><br/>
 </span> <br/>
 
-Add message:<br/>
+<!--Add message:<br/>-->
 <form method="post" action="add-message">
-    <!--/*@thymesVar id="user" type="com.pack.colorchat.User"*/-->
+    <!--/*@thymesVar id="user" type="com.pack.colorchat.model.User"*/-->
     <input type="hidden" name="user-id" th:value="${user.id}">
-    <textarea name="message" rows=10 cols=30></textarea><br>
+    <label for="message">Add message:</label><br/>
+    <textarea id="message" name="message" rows=10 cols=30></textarea>
+    <br>
     <input type="submit" name="okbutton" value="Send">
 </form>
 

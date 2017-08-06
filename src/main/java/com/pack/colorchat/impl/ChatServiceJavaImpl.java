@@ -1,5 +1,8 @@
-package com.pack.colorchat;
+package com.pack.colorchat.impl;
 
+import com.pack.colorchat.service.ChatService;
+import com.pack.colorchat.model.Message;
+import com.pack.colorchat.model.User;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -7,7 +10,7 @@ import java.util.Collections;
 import java.util.List;
 
 @Component
-public class ChatService {
+public class ChatServiceJavaImpl implements ChatService {
 
     private List<Message> messages = Collections.synchronizedList(new ArrayList<>());
 

@@ -1,6 +1,10 @@
-package com.pack.colorchat;
+package com.pack.colorchat.rest;
 
+import com.pack.colorchat.model.Color;
+import com.pack.colorchat.service.ChatService;
+import com.pack.colorchat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -12,23 +16,27 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
 import java.util.Map;
 
-import static com.pack.colorchat.Color.*;
+import static com.pack.colorchat.model.Color.*;
+import static com.pack.colorchat.service.ChatServiceKt.KOTLIN_CHAT_SERVICE;
+import static com.pack.colorchat.service.Constants.KOTLIN_USER_SERVICE;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
 @SessionAttributes("user")
 public class ChatController {
 
-    private static final String CHAT = "chat";
-    private static final String CHAT_VIEW = "chat-view";
     private static final String INDEX = "index";
+    public static final String CHAT = "chat";
+    private static final String CHAT_VIEW = "chat-view";
 
     @Value("${application.message:Welcome!}")
     private String message;
     @Value("${test.chat:true}")
     private Boolean testChat;
+    @Qualifier(KOTLIN_USER_SERVICE)
     @Autowired
     private UserService userService;
+    @Qualifier(KOTLIN_CHAT_SERVICE)
     @Autowired
     private ChatService chatService;
 
@@ -43,7 +51,7 @@ public class ChatController {
     }
 
     @RequestMapping("/")
-    public String home(Map map, HttpSession httpSession) {
+    public String home(Map<String, Object> map) {
         map.put("message", message);
         map.put("colors", Color.values());
         return INDEX;
@@ -58,7 +66,7 @@ public class ChatController {
     }
 
     @RequestMapping("/" + CHAT)
-    public String chat(Map map, @SessionAttribute("user_id") String userId) {
+    public String chat(Map<String, Object> map, @SessionAttribute(name = "user_id", required = false) String userId) {
         checkUser(userId);
         map.put("user", userService.getUser(userId));
         map.put("users", userService.getUsers());
@@ -67,7 +75,7 @@ public class ChatController {
     }
 
     @RequestMapping(value = "/add-message", method = POST)
-    public String addMessage(Map map, @RequestParam("user-id") String userId, @RequestParam("message") String message) {
+    public String addMessage(@RequestParam("user-id") String userId, @RequestParam("message") String message) {
         checkUser(userId);
         chatService.addMessage(userService.getUser(userId), message);
         return "redirect:" + CHAT;
