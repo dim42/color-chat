@@ -1,12 +1,15 @@
 package com.pack.colorchat.app;
 
 import com.pack.colorchat.impl.ChatServiceKtImpl;
-import com.pack.colorchat.rest.ChatController;
+import com.pack.colorchat.rest.ChatControllerKt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;
 
-@ComponentScan(basePackageClasses = {ChatController.class, ChatServiceKtImpl.class})
+@ComponentScan(basePackageClasses = {
+//        ChatControllerJava.class,
+        ChatControllerKt.class,
+        ChatServiceKtImpl.class})
 @SpringBootApplication
 public class ColorChatApplication {
 

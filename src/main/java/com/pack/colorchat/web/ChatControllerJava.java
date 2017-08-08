@@ -1,4 +1,4 @@
-package com.pack.colorchat.rest;
+package com.pack.colorchat.web;
 
 import com.pack.colorchat.model.Color;
 import com.pack.colorchat.service.ChatService;
@@ -10,7 +10,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
 
 import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpSession;
@@ -18,16 +17,11 @@ import java.util.Map;
 
 import static com.pack.colorchat.model.Color.*;
 import static com.pack.colorchat.service.ChatServiceKt.KOTLIN_CHAT_SERVICE;
-import static com.pack.colorchat.service.Constants.KOTLIN_USER_SERVICE;
+import static com.pack.colorchat.service.Constants.*;
 import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
 @Controller
-@SessionAttributes("user")
-public class ChatController {
-
-    private static final String INDEX = "index";
-    public static final String CHAT = "chat";
-    private static final String CHAT_VIEW = "chat-view";
+public class ChatControllerJava {
 
     @Value("${application.message:Welcome!}")
     private String message;
@@ -54,19 +48,19 @@ public class ChatController {
     public String home(Map<String, Object> map) {
         map.put("message", message);
         map.put("colors", Color.values());
-        return INDEX;
+        return INDEX_VIEW;
     }
 
-    @RequestMapping("/add-user")
+    @RequestMapping("/" + ADD_USER_PATH)
     public String addUser(@RequestParam("name") String name, @RequestParam("color") String color, HttpSession httpSession) {
         checkUser(name);
         String id = userService.addUser(name, Companion.of(color));
-        httpSession.setAttribute("user_id", id);
-        return "redirect:" + CHAT;
+        httpSession.setAttribute(USER_ID_SESS_ATTR, id);
+        return "redirect:" + CHAT_PATH;
     }
 
-    @RequestMapping("/" + CHAT)
-    public String chat(Map<String, Object> map, @SessionAttribute(name = "user_id", required = false) String userId) {
+    @RequestMapping("/" + CHAT_PATH)
+    public String chat(Map<String, Object> map, @SessionAttribute(name = USER_ID_SESS_ATTR, required = false) String userId) {
         checkUser(userId);
         map.put("user", userService.getUser(userId));
         map.put("users", userService.getUsers());
@@ -74,11 +68,11 @@ public class ChatController {
         return CHAT_VIEW;
     }
 
-    @RequestMapping(value = "/add-message", method = POST)
-    public String addMessage(@RequestParam("user-id") String userId, @RequestParam("message") String message) {
+    @RequestMapping(path = "/" + ADD_MESSAGE_PATH, method = POST)
+    public String addMessage(@RequestParam(USER_ID_PARAM) String userId, @RequestParam("message") String message) {
         checkUser(userId);
         chatService.addMessage(userService.getUser(userId), message);
-        return "redirect:" + CHAT;
+        return "redirect:" + CHAT_PATH;
     }
 
     private void checkUser(String userId) {
