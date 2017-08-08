@@ -24,21 +24,18 @@ import javax.annotation.PostConstruct
 import javax.servlet.http.HttpSession
 
 @Controller
-class ChatControllerKt(@Value("\${application.message:Welcome!}")
-                       private val message: String) {
-    @Value("\${test.chat:true}")
-    private val testChat: Boolean? = null
-
-    @Qualifier(KOTLIN_USER_SERVICE)
-    @Autowired
-    lateinit var userService: UserService
-    @Qualifier(KOTLIN_CHAT_SERVICE)
-    @Autowired
-    lateinit var chatService: ChatService
+class ChatControllerKt @Autowired constructor(@Value("\${application.message:Welcome!}")
+                                              private val message: String,
+                                              @Value("\${test.chat:true}")
+                                              private val testChat: Boolean,
+                                              @Qualifier(KOTLIN_USER_SERVICE)
+                                              val userService: UserService,
+                                              @Qualifier(KOTLIN_CHAT_SERVICE)
+                                              val chatService: ChatService) {
 
     @PostConstruct
     fun init() {
-        if (testChat!!) {
+        if (testChat) {
             val id1 = userService.addUser("test user1", GREEN)
             val id2 = userService.addUser("test user2", RED)
             chatService.addMessage(userService.getUser(id1), "t1 fdsf dsfvse<br/>2fsdf")

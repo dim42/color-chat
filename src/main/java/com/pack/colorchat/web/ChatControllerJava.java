@@ -27,12 +27,15 @@ public class ChatControllerJava {
     private String message;
     @Value("${test.chat:true}")
     private Boolean testChat;
-    @Qualifier(KOTLIN_USER_SERVICE)
+
+    private final UserService userService;
+    private final ChatService chatService;
+
     @Autowired
-    private UserService userService;
-    @Qualifier(KOTLIN_CHAT_SERVICE)
-    @Autowired
-    private ChatService chatService;
+    public ChatControllerJava(@Qualifier(KOTLIN_USER_SERVICE) UserService userService, @Qualifier(KOTLIN_CHAT_SERVICE) ChatService chatService) {
+        this.userService = userService;
+        this.chatService = chatService;
+    }
 
     @PostConstruct
     public void init() {
