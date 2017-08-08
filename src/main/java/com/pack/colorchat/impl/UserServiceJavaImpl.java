@@ -18,14 +18,14 @@ public class UserServiceJavaImpl implements UserService {
 
     @Override
     public String addUser(String name, Color color) {
-        users.values().stream().filter(user -> user.getName().equals(name)).findAny().ifPresent(user -> {
-            throw new RuntimeException(name + " user already exists!");
-        });
+        String id = UUID.randomUUID().toString();
         synchronized (users) {
-            String id = UUID.randomUUID().toString();
+            users.values().stream().filter(user -> user.getName().equals(name)).findAny().ifPresent(user -> {
+                throw new RuntimeException(name + " user already exists!");
+            });
             users.put(id, new User(id, name, color));
-            return id;
         }
+        return id;
     }
 
     @Override
