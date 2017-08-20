@@ -19,6 +19,16 @@ class UserServiceKtImpl : UserService {
         val id = UUID.randomUUID().toString()
         synchronized(users) {
             users.values.filter { it.name == name }.any { throw RuntimeException(name + " user already exists!") }
+//            users.values.forEach { user ->
+//                if (user.name == name) {
+//                    throw RuntimeException(name + " user already exists!")
+//                }
+//            }
+//            for (user in users.values) {
+//                if (user.name == name) {
+//                    throw RuntimeException(name + " user already exists!")
+//                }
+//            }
             users.put(id, User(id, name, color))
         }
         return id

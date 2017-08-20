@@ -4,7 +4,7 @@ import com.pack.colorchat.app.ColorChatApplication
 import com.pack.colorchat.model.User
 import com.pack.colorchat.service.ChatService
 import com.pack.colorchat.service.UserService
-import com.pack.colorchat.web.ChatControllerJava
+import com.pack.colorchat.web.ChatControllerKt
 import groovy.util.logging.Slf4j
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.test.context.ContextConfiguration
@@ -24,22 +24,23 @@ import static org.springframework.test.web.servlet.setup.MockMvcBuilders.standal
 @Slf4j
 @ContextConfiguration(classes = [ColorChatApplication.class])
 @SpringBootTest(webEnvironment = RANDOM_PORT)
-class ChatControllerJavaSpec extends Specification {
+class ChatControllerSpec extends Specification {
 
     def TEST_USER_ID = "12"
-    def controller = new ChatControllerJava()
-    UserService userService = Spy(UserService.class)
-    ChatService chatService = Spy(ChatService)
-    MockMvc mvc = standaloneSetup(controller).build()
+    def controller
+    MockMvc mvc
 
     void setup() {
         log.info("Setup")
-        controller.userService = userService
-        controller.chatService = chatService
+        UserService userService = Spy(UserService)
+        ChatService chatService = Spy(ChatService)
         def user = new User(TEST_USER_ID, "name1", GREEN)
         userService.getUser(TEST_USER_ID) >> user
         userService.getUsers() >> singletonList(user)
         chatService.getMessages() >> emptyList()
+//        controller = new ChatControllerJava(null, null, userService, chatService)
+        controller = new ChatControllerKt("", true, userService, chatService)
+        mvc = standaloneSetup(controller).build()
     }
 
     def "Home"() {
@@ -53,7 +54,7 @@ class ChatControllerJavaSpec extends Specification {
 
     def "Chat"() {
         when:
-        def response = mvc.perform(get("/" + CHAT_PATH).sessionAttr(USER_ID_SESS_ATTR, TEST_USER_ID)).andReturn().response
+        def response = mvc.perform(get(CHAT_PATH).sessionAttr(USER_ID_SESS_ATTR, TEST_USER_ID)).andReturn().response
 
         then:
         response.status == OK.value()

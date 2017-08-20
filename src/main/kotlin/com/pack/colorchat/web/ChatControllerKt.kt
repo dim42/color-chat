@@ -1,4 +1,4 @@
-package com.pack.colorchat.rest
+package com.pack.colorchat.web
 
 import com.pack.colorchat.model.Color.*
 import com.pack.colorchat.service.ChatService
@@ -16,8 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.stereotype.Controller
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RequestMethod.POST
+import org.springframework.web.bind.annotation.GetMapping
+import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestParam
 import org.springframework.web.bind.annotation.SessionAttribute
 import javax.annotation.PostConstruct
@@ -25,9 +25,9 @@ import javax.servlet.http.HttpSession
 
 @Controller
 class ChatControllerKt @Autowired constructor(@Value("\${application.message:Welcome!}")
-                                              private val message: String,
-                                              @Value("\${test.chat:true}")
-                                              private val testChat: Boolean,
+                                              val message: String,
+                                              @Value("\${test.chat.kt:true}")
+                                              val testChat: Boolean,
                                               @Qualifier(KOTLIN_USER_SERVICE)
                                               val userService: UserService,
                                               @Qualifier(KOTLIN_CHAT_SERVICE)
@@ -43,14 +43,14 @@ class ChatControllerKt @Autowired constructor(@Value("\${application.message:Wel
         }
     }
 
-    @RequestMapping("/")
+    @GetMapping("/")
     fun home(map: MutableMap<String, Any>): String {
         map.put("message", message)
         map.put("colors", values())
         return INDEX_VIEW
     }
 
-    @RequestMapping("/" + ADD_USER_PATH)
+    @GetMapping(ADD_USER_PATH)
     fun addUser(@RequestParam("name") name: String, @RequestParam("color") color: String, httpSession: HttpSession): String {
         checkUser(name)
         val id = userService.addUser(name, Companion.of(color))
@@ -58,7 +58,7 @@ class ChatControllerKt @Autowired constructor(@Value("\${application.message:Wel
         return "redirect:" + CHAT_PATH
     }
 
-    @RequestMapping("/" + CHAT_PATH)
+    @GetMapping(CHAT_PATH)
     fun chat(map: MutableMap<String, Any>, @SessionAttribute(name = USER_ID_SESS_ATTR, required = false) userId: String): String {
         checkUser(userId)
         map.put("user", userService.getUser(userId))
@@ -67,7 +67,7 @@ class ChatControllerKt @Autowired constructor(@Value("\${application.message:Wel
         return CHAT_VIEW
     }
 
-    @RequestMapping(path = arrayOf("/" + ADD_MESSAGE_PATH), method = arrayOf(POST))
+    @PostMapping(ADD_MESSAGE_PATH)
     fun addMessage(@RequestParam(USER_ID_PARAM) userId: String, @RequestParam("message") message: String): String {
         checkUser(userId)
         chatService.addMessage(userService.getUser(userId), message)

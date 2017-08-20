@@ -6,7 +6,8 @@ import com.pack.colorchat.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.SessionAttribute;
@@ -18,21 +19,20 @@ import java.util.Map;
 import static com.pack.colorchat.model.Color.*;
 import static com.pack.colorchat.service.ChatServiceKt.KOTLIN_CHAT_SERVICE;
 import static com.pack.colorchat.service.Constants.*;
-import static org.springframework.web.bind.annotation.RequestMethod.POST;
 
-@Controller
+//@Controller
 public class ChatControllerJava {
 
-    @Value("${application.message:Welcome!}")
-    private String message;
-    @Value("${test.chat:true}")
-    private Boolean testChat;
-
+    private final String message;
+    private final Boolean testChat;
     private final UserService userService;
     private final ChatService chatService;
 
     @Autowired
-    public ChatControllerJava(@Qualifier(KOTLIN_USER_SERVICE) UserService userService, @Qualifier(KOTLIN_CHAT_SERVICE) ChatService chatService) {
+    public ChatControllerJava(@Value("${application.message:Welcome!}") String message, @Value("${test.chat.java:true}") Boolean testChat,
+                              @Qualifier(KOTLIN_USER_SERVICE) UserService userService, @Qualifier(KOTLIN_CHAT_SERVICE) ChatService chatService) {
+        this.message = message;
+        this.testChat = testChat;
         this.userService = userService;
         this.chatService = chatService;
     }
@@ -54,7 +54,7 @@ public class ChatControllerJava {
         return INDEX_VIEW;
     }
 
-    @RequestMapping("/" + ADD_USER_PATH)
+    @GetMapping(ADD_USER_PATH)
     public String addUser(@RequestParam("name") String name, @RequestParam("color") String color, HttpSession httpSession) {
         checkUser(name);
         String id = userService.addUser(name, Companion.of(color));
@@ -62,7 +62,7 @@ public class ChatControllerJava {
         return "redirect:" + CHAT_PATH;
     }
 
-    @RequestMapping("/" + CHAT_PATH)
+    @GetMapping(CHAT_PATH)
     public String chat(Map<String, Object> map, @SessionAttribute(name = USER_ID_SESS_ATTR, required = false) String userId) {
         checkUser(userId);
         map.put("user", userService.getUser(userId));
@@ -71,7 +71,7 @@ public class ChatControllerJava {
         return CHAT_VIEW;
     }
 
-    @RequestMapping(path = "/" + ADD_MESSAGE_PATH, method = POST)
+    @PostMapping(ADD_MESSAGE_PATH)
     public String addMessage(@RequestParam(USER_ID_PARAM) String userId, @RequestParam("message") String message) {
         checkUser(userId);
         chatService.addMessage(userService.getUser(userId), message);

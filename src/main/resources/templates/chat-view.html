@@ -20,7 +20,7 @@ Conversation:<br/>
 </span> <br/>
 
 <!--Add message:<br/>-->
-<form method="post" action="add-message">
+<form method="post" action="/add-message">
     <!--/*@thymesVar id="user" type="com.pack.colorchat.model.User"*/-->
     <input type="hidden" name="user-id" th:value="${user.id}">
     <label for="message">Add message:</label><br/>

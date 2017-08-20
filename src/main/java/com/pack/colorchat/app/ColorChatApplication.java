@@ -1,7 +1,7 @@
 package com.pack.colorchat.app;
 
 import com.pack.colorchat.impl.ChatServiceKtImpl;
-import com.pack.colorchat.rest.ChatControllerKt;
+import com.pack.colorchat.web.ChatControllerKt;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.ComponentScan;

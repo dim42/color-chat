@@ -33,12 +33,14 @@ public class ColorChatApplicationTests {
     private MockMvc mockMvc;
     @Qualifier(KOTLIN_USER_SERVICE)
     @Autowired
-    UserService userService;
+    private UserService userService;
 
     @Test
     public void testIndex() throws Exception {
         MockHttpServletResponse response = mockMvc.perform(get("/"))
-                .andDo(print()).andDo(log()).andExpect(status().isOk()).andReturn().getResponse();
+                .andDo(print()).andDo(log())
+                .andExpect(status().isOk())
+                .andReturn().getResponse();
 
         assertTrue(response.getContentAsString().contains(ADD_USER_PATH));
     }
@@ -47,12 +49,10 @@ public class ColorChatApplicationTests {
     public void testChat() throws Exception {
         String userId = userService.addUser("user3", YELLOW);
 
-        MockHttpServletResponse response = mockMvc.perform(get("/" + CHAT_PATH).sessionAttr(USER_ID_SESS_ATTR, userId))
-                .andDo(print())
-                .andDo(log())
+        MockHttpServletResponse response = mockMvc.perform(get(CHAT_PATH).sessionAttr(USER_ID_SESS_ATTR, userId))
+                .andDo(print()).andDo(log())
                 .andExpect(status().isOk())
-                .andReturn()
-                .getResponse();
+                .andReturn().getResponse();
 
         assertTrue(response.getContentAsString().contains("Conversation"));
     }
@@ -61,7 +61,7 @@ public class ColorChatApplicationTests {
     public void testAddMessage() throws Exception {
         String userId = userService.addUser("user4", YELLOW);
 
-        MockHttpServletResponse response = mockMvc.perform(post("/" + ADD_MESSAGE_PATH)
+        MockHttpServletResponse response = mockMvc.perform(post(ADD_MESSAGE_PATH)
                 .param(USER_ID_PARAM, userId)
                 .param("message", "message1"))
                 .andDo(print()).andDo(log()).andExpect(status().isFound())
