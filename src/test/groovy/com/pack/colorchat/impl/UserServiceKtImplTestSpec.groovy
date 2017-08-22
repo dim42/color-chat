@@ -34,7 +34,7 @@ class UserServiceKtImplTestSpec extends Specification {
             for (int i = 0; i < poolSize; i++) {
                 threadPool.execute({
                     try {
-                        userService.addUser("name" + i, GREEN)
+                        userService.addUser("conc_name" + i, GREEN)
                     } catch (Exception e) {
                         success.set(false)
                         println("error!" + e)

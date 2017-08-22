@@ -54,8 +54,8 @@ public class ChatControllerJava {
         return INDEX_VIEW;
     }
 
-    @GetMapping(ADD_USER_PATH)
-    public String addUser(@RequestParam("name") String name, @RequestParam("color") String color, HttpSession httpSession) {
+    @PostMapping(ADD_USER_PATH)
+    public String addUser(@RequestParam(USER_NAME_PARAM) String name, @RequestParam(COLOR_PARAM) String color, HttpSession httpSession) {
         checkUser(name);
         String id = userService.addUser(name, Companion.of(color));
         httpSession.setAttribute(USER_ID_SESS_ATTR, id);

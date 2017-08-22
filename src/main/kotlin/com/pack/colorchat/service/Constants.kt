@@ -6,6 +6,8 @@ object Constants {
     const val CHAT_VIEW = "chat-view"
     const val USER_ID_SESS_ATTR = "user_id"
     const val USER_ID_PARAM = "user-id"
+    const val USER_NAME_PARAM = "user-name"
+    const val COLOR_PARAM = "color"
     const val ADD_USER_PATH = "/add-user"
     const val ADD_MESSAGE_PATH = "/add-message"
     const val CHAT_PATH = "/chat-path"

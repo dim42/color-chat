@@ -1,15 +1,20 @@
 package com.pack.colorchat.web
 
-import com.pack.colorchat.model.Color.*
+import com.pack.colorchat.model.Color.Companion
+import com.pack.colorchat.model.Color.GREEN
+import com.pack.colorchat.model.Color.RED
+import com.pack.colorchat.model.Color.values
 import com.pack.colorchat.service.ChatService
 import com.pack.colorchat.service.Constants.ADD_MESSAGE_PATH
 import com.pack.colorchat.service.Constants.ADD_USER_PATH
 import com.pack.colorchat.service.Constants.CHAT_PATH
 import com.pack.colorchat.service.Constants.CHAT_VIEW
+import com.pack.colorchat.service.Constants.COLOR_PARAM
 import com.pack.colorchat.service.Constants.INDEX_VIEW
 import com.pack.colorchat.service.Constants.KOTLIN_USER_SERVICE
 import com.pack.colorchat.service.Constants.USER_ID_PARAM
 import com.pack.colorchat.service.Constants.USER_ID_SESS_ATTR
+import com.pack.colorchat.service.Constants.USER_NAME_PARAM
 import com.pack.colorchat.service.KOTLIN_CHAT_SERVICE
 import com.pack.colorchat.service.UserService
 import org.springframework.beans.factory.annotation.Autowired
@@ -50,8 +55,8 @@ class ChatControllerKt @Autowired constructor(@Value("\${application.message:Wel
         return INDEX_VIEW
     }
 
-    @GetMapping(ADD_USER_PATH)
-    fun addUser(@RequestParam("name") name: String, @RequestParam("color") color: String, httpSession: HttpSession): String {
+    @PostMapping(ADD_USER_PATH)
+    fun addUser(@RequestParam(USER_NAME_PARAM) name: String, @RequestParam(COLOR_PARAM) color: String, httpSession: HttpSession): String {
         checkUser(name)
         val id = userService.addUser(name, Companion.of(color))
         httpSession.setAttribute(USER_ID_SESS_ATTR, id)

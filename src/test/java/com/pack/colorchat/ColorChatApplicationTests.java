@@ -13,7 +13,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static com.pack.colorchat.model.Color.YELLOW;
-import static com.pack.colorchat.service.Constants.*;
+import static com.pack.colorchat.service.Constants.ADD_MESSAGE_PATH;
+import static com.pack.colorchat.service.Constants.ADD_USER_PATH;
+import static com.pack.colorchat.service.Constants.CHAT_PATH;
+import static com.pack.colorchat.service.Constants.COLOR_PARAM;
+import static com.pack.colorchat.service.Constants.KOTLIN_USER_SERVICE;
+import static com.pack.colorchat.service.Constants.USER_ID_PARAM;
+import static com.pack.colorchat.service.Constants.USER_ID_SESS_ATTR;
+import static com.pack.colorchat.service.Constants.USER_NAME_PARAM;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
@@ -55,6 +62,18 @@ public class ColorChatApplicationTests {
                 .andReturn().getResponse();
 
         assertTrue(response.getContentAsString().contains("Conversation"));
+    }
+
+    @Test
+    public void testAddUser() throws Exception {
+        MockHttpServletResponse response = mockMvc.perform(post(ADD_USER_PATH)
+                .param(USER_NAME_PARAM, "name2")
+                .param(COLOR_PARAM, "red"))
+                .andDo(print()).andDo(log()).andExpect(status().isFound())
+                .andExpect(redirectedUrl(CHAT_PATH))
+                .andReturn().getResponse();
+
+        assertThat(response.getHeader("Location"), equalTo(CHAT_PATH));
     }
 
     @Test
